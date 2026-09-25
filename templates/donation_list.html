@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Donation Records | Bloodline Connect{% endblock %}
+
+{% block content %}
+<div class="card-container">
+  <div class="glass-card">
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+      <div>
+        <p class="eyebrow">Fulfillment Log</p>
+        <h1>Donation Records</h1>
+        <p>Log of fulfilled blood donations, donor tracking, and blood bank stock additions.</p>
+      </div>
+      <a href="{{ url_for('donation_page') }}" class="btn-primary" style="width: auto; padding: 12px 24px; margin: 0;">
+        + Record New Donation
+      </a>
+    </div>
+
+    <div class="table-responsive">
+      {% if donations %}
+      <table class="glass-table">
+        <thead>
+          <tr>
+            <th>Donation ID</th>
+            <th>Group</th>
+            <th>Donor ID</th>
+            <th>Request ID</th>
+            <th>Units</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>Notes</th>
+            {% if g.user and g.user.role == 'admin' %}<th>Action</th>{% endif %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for don in donations %}
+          <tr>
+            <td>{{ don.donation_id }}</td>
+            <td><span class="status-pill critical" style="font-size: 0.85rem;">{{ don.blood_group }}</span></td>
+            <td><strong>{{ don.donor_id }}</strong></td>
+            <td><strong>{{ don.request_id }}</strong></td>
+            <td><strong>{{ don.units }}</strong> unit(s)</td>
+            <td>{{ don.donation_date }}</td>
+            <td>{{ don.location }}</td>
+            <td><span style="color: var(--text-muted); font-size: 0.85rem;">{{ don.notes if don.notes else 'N/A' }}</span></td>
+            {% if g.user and g.user.role == 'admin' %}
+            <td>
+              <form action="{{ url_for('delete_donation', donation_id=don.donation_id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete donation record {{ don.donation_id }}?');">
+                <button type="submit" class="btn-sm btn-danger-sm" style="border:none; cursor:pointer;">Delete</button>
+              </form>
+            </td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div style="text-align: center; padding: 60px 20px;">
+        <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 20px;">No donation records logged yet.</p>
+        <a href="{{ url_for('donation_page') }}" class="btn-primary" style="display: inline-flex; width: auto; padding: 12px 28px;">
+          Log First Donation
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Submit Blood Request | Bloodline Connect{% endblock %}
+
+{% block content %}
+<div class="card-container" style="max-width: 650px;">
+  <div class="glass-card">
+    <div class="card-header">
+      <div class="drop-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"></path></svg>
+      </div>
+      <p class="eyebrow">Blood Donation Management System</p>
+      <h1>Blood Request</h1>
+      <p>Submit emergency blood requests to link with donors across blood banks.</p>
+    </div>
+
+    <form class="styled-form" action="{{ url_for('request_page') }}" method="POST">
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="requestId">Request ID (Auto-Generated)</label>
+          <input type="text" id="requestId" name="requestId" value="{{ suggested_id }}" placeholder="e.g. REQ-1234">
+          <p class="hint">Auto-generated. You may customize if needed.</p>
+        </div>
+        <div class="field-group">
+          <label for="patientName">Patient Name</label>
+          <input type="text" id="patientName" name="patientName" placeholder="e.g. Rajesh Patil" required>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="bloodGroup">Blood Group</label>
+          <select id="bloodGroup" name="bloodGroup" required>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+" selected>O+</option>
+            <option value="O-">O-</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label for="units">Units Required</label>
+          <input type="number" id="units" name="units" placeholder="e.g. 2" min="1" max="20" value="1" required>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="hospitalName">Hospital Name</label>
+          <input type="text" id="hospitalName" name="hospitalName" placeholder="e.g. Ruby Hall Clinic" required>
+        </div>
+        <div class="field-group">
+          <label for="city">City</label>
+          <input type="text" id="city" name="city" placeholder="e.g. Pune" required>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="contactNo">Contact Number</label>
+          <input type="tel" id="contactNo" name="contactNo" placeholder="10-digit mobile number" pattern="[0-9]{10}" required>
+        </div>
+        <div class="field-group">
+          <label for="requestDate">Request Date</label>
+          <input type="date" id="requestDate" name="requestDate" value="{{ today_date }}" required>
+        </div>
+      </div>
+
+      <div class="field-group full-width">
+        <label>Urgency Level</label>
+        <div class="radio-options">
+          <div class="radio-btn">
+            <input type="radio" id="urg-critical" name="urgency" value="critical">
+            <label for="urg-critical" style="color: var(--danger);">Critical</label>
+          </div>
+          <div class="radio-btn">
+            <input type="radio" id="urg-high" name="urgency" value="high">
+            <label for="urg-high" style="color: var(--warning);">High</label>
+          </div>
+          <div class="radio-btn">
+            <input type="radio" id="urg-normal" name="urgency" value="normal" checked>
+            <label for="urg-normal">Normal</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group full-width">
+        <label for="status">Initial Status</label>
+        <select id="status" name="status" required>
+          <option value="pending" selected>Pending</option>
+          <option value="in-progress">In Progress</option>
+          <option value="fulfilled">Fulfilled</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn-primary">Submit Blood Request</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

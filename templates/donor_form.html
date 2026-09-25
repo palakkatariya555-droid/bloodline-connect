@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Register Donor | Bloodline Connect{% endblock %}
+
+{% block content %}
+<div class="card-container" style="max-width: 650px;">
+  <div class="glass-card">
+    <div class="card-header">
+      <div class="drop-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+      </div>
+      <p class="eyebrow">Blood Donation Management System</p>
+      <h1>Donor Registration</h1>
+      <p>Register a donor for lifetime donation tracking and emergency matching.</p>
+    </div>
+
+    <form class="styled-form" action="{{ url_for('donor_page') }}" method="POST">
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="donorId">Donor ID (Auto-Generated)</label>
+          <input type="text" id="donorId" name="donorId" value="{{ suggested_id }}" placeholder="e.g. DNR-1234">
+          <p class="hint">Auto-generated. You may customize if needed.</p>
+        </div>
+        <div class="field-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" placeholder="e.g. Priya Sharma" required>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="age">Age</label>
+          <input type="number" id="age" name="age" placeholder="18 - 65" min="18" max="65" value="25" required>
+        </div>
+        <div class="field-group">
+          <label for="bloodGroup">Blood Group</label>
+          <select id="bloodGroup" name="bloodGroup" required>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+" selected>O+</option>
+            <option value="O-">O-</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-group full-width">
+        <label>Gender</label>
+        <div class="radio-options">
+          <div class="radio-btn">
+            <input type="radio" id="g-male" name="gender" value="male" checked>
+            <label for="g-male">Male</label>
+          </div>
+          <div class="radio-btn">
+            <input type="radio" id="g-female" name="gender" value="female">
+            <label for="g-female">Female</label>
+          </div>
+          <div class="radio-btn">
+            <input type="radio" id="g-other" name="gender" value="other">
+            <label for="g-other">Other</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="10-digit mobile number" pattern="[0-9]{10}" required>
+        </div>
+        <div class="field-group">
+          <label for="city">City</label>
+          <input type="text" id="city" name="city" placeholder="e.g. Pune" required>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="lastDonation">Last Donation Date</label>
+          <input type="date" id="lastDonation" name="lastDonation">
+          <p class="hint">Leave blank if first-time donor.</p>
+        </div>
+        <div class="field-group">
+          <label for="availability">Availability</label>
+          <select id="availability" name="availability" required>
+            <option value="available" selected>Available</option>
+            <option value="unavailable">Not Available</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-group full-width">
+        <label for="password">Account Password (Optional)</label>
+        <input type="password" id="password" name="password" placeholder="Create password for donor login">
+        <p class="hint">Leave blank to use the configured fallback only for local development.</p>
+      </div>
+
+      <button type="submit" class="btn-primary">Register Donor</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

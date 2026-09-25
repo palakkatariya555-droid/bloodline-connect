@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Account Registration — Bloodline Connect{% endblock %}
+
+{% block content %}
+<div class="card-container" style="max-width: 580px;">
+  <div class="glass-card">
+    <div class="card-header" style="text-align: center;">
+      <div class="drop-icon" style="margin: 0 auto 16px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="8.5" cy="7" r="4"></circle>
+          <line x1="20" y1="8" x2="20" y2="14"></line>
+          <line x1="23" y1="11" x2="17" y2="11"></line>
+        </svg>
+      </div>
+      <div class="eyebrow">Create Account</div>
+      <h1>Register for Bloodline</h1>
+      <p>Join as a Life-Saving Donor or Administrator</p>
+    </div>
+
+    <form action="{{ url_for('register') }}" method="POST" class="styled-form">
+      <div class="field-group">
+        <label>Account Type</label>
+        <div class="radio-options">
+          <div class="radio-btn">
+            <input type="radio" id="role-donor" name="role" value="donor" checked onclick="toggleRoleFields('donor')">
+            <label for="role-donor">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              Blood Donor
+            </label>
+          </div>
+          <div class="radio-btn">
+            <input type="radio" id="role-admin" name="role" value="admin" onclick="toggleRoleFields('admin')">
+            <label for="role-admin">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              Administrator
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field-group full-width">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" placeholder="e.g. Dr. Ramesh Kumar" required>
+        </div>
+
+        <div class="field-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" placeholder="10-digit mobile number" required>
+        </div>
+
+        <div class="field-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" minlength="4" placeholder="Choose a password" required>
+        </div>
+      </div>
+
+      <!-- Donor Specific Fields -->
+      <div id="donor-fields" class="form-grid">
+        <div class="field-group">
+          <label for="bloodGroup">Blood Group</label>
+          <select id="bloodGroup" name="bloodGroup">
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="O+" selected>O+</option>
+            <option value="O-">O-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label for="age">Age</label>
+          <input type="number" id="age" name="age" min="18" max="65" value="25">
+        </div>
+
+        <div class="field-group">
+          <label for="gender">Gender</label>
+          <select id="gender" name="gender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label for="city">City</label>
+          <input type="text" id="city" name="city" placeholder="e.g. Pune, Mumbai">
+        </div>
+      </div>
+
+      <!-- Admin Specific Fields -->
+      <div id="admin-fields" class="form-grid" style="display: none;">
+        <div class="field-group full-width">
+          <label for="admin-username">Admin Username</label>
+          <input type="text" id="admin-username" name="username" placeholder="Choose admin username">
+        </div>
+        <div class="field-group">
+          <label for="manages">Manages</label>
+          <input type="text" id="manages" name="manages" placeholder="e.g. Blood Bank, Donors" value="Blood Bank Operations">
+        </div>
+        <div class="field-group">
+          <label for="handles">Handles</label>
+          <input type="text" id="handles" name="handles" placeholder="e.g. Approvals, Inventories" value="Donation Requests">
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        Complete Registration
+      </button>
+
+      <div style="text-align: center; margin-top: 24px; font-size: 0.88rem; color: var(--text-muted);">
+        Already have an account? 
+        <a href="{{ url_for('login') }}" style="color: var(--accent); text-decoration: none; font-weight: 600;">Sign In Here</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function toggleRoleFields(role) {
+    const donorFields = document.getElementById('donor-fields');
+    const adminFields = document.getElementById('admin-fields');
+    if (role === 'admin') {
+      donorFields.style.display = 'none';
+      adminFields.style.display = 'grid';
+    } else {
+      donorFields.style.display = 'grid';
+      adminFields.style.display = 'none';
+    }
+  }
+</script>
+{% endblock %}

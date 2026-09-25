@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}System Administrators | Bloodline Connect{% endblock %}
+
+{% block content %}
+<div class="card-container">
+  <div class="glass-card">
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+      <div>
+        <p class="eyebrow">Directory</p>
+        <h1>System Administrators</h1>
+        <p>List of all registered blood bank administrators and operational staff.</p>
+      </div>
+      {% if g.user and g.user.role == 'admin' %}
+      <a href="{{ url_for('admin_page') }}" class="btn-primary" style="width: auto; padding: 12px 24px; margin: 0;">
+        + Register New Admin
+      </a>
+      {% endif %}
+    </div>
+
+    <div class="table-responsive">
+      {% if admins %}
+      <table class="glass-table">
+        <thead>
+          <tr>
+            <th>Admin ID</th>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Phone</th>
+            <th>Manages</th>
+            <th>Handles</th>
+            {% if g.user and g.user.role == 'admin' %}<th>Action</th>{% endif %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for admin in admins %}
+          <tr>
+            <td>{{ admin.admin_id }}</td>
+            <td><strong>{{ admin.name }}</strong></td>
+            <td>@{{ admin.username }}</td>
+            <td>{{ admin.phone_no }}</td>
+            <td><span class="status-pill normal">{{ admin.manages|title }}</span></td>
+            <td><span class="status-pill in-progress">{{ admin.handles|title }}</span></td>
+            {% if g.user and g.user.role == 'admin' %}
+            <td>
+              {% if admin.admin_id != g.user.id %}
+              <form action="{{ url_for('delete_admin', admin_id=admin.admin_id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to remove this admin?');">
+                <button type="submit" class="btn-sm btn-danger-sm" style="border:none; cursor:pointer;">Delete</button>
+              </form>
+              {% else %}
+              <span style="font-size: 0.8rem; color: var(--text-muted);">(Current User)</span>
+              {% endif %}
+            </td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div style="text-align: center; padding: 60px 20px;">
+        <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 20px;">No administrators registered yet.</p>
+        {% if g.user and g.user.role == 'admin' %}
+        <a href="{{ url_for('admin_page') }}" class="btn-primary" style="display: inline-flex; width: auto; padding: 12px 28px;">
+          Create Admin Account
+        </a>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

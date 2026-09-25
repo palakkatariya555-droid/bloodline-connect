@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Account Login — Bloodline Connect{% endblock %}
+
+{% block content %}
+<div class="card-container" style="max-width: 480px;">
+  <div class="glass-card">
+    <div class="card-header" style="text-align: center;">
+      <div class="drop-icon" style="margin: 0 auto 16px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+          <polyline points="10 17 15 12 10 7"></polyline>
+          <line x1="15" y1="12" x2="3" y2="12"></line>
+        </svg>
+      </div>
+      <div class="eyebrow">Portal Authentication</div>
+      <h1>Sign In to Bloodline</h1>
+      <p>Access your administrator dashboard or donor account</p>
+    </div>
+
+    <form action="{{ url_for('login') }}{% if request.args.get('next') %}?next={{ request.args.get('next') }}{% endif %}" method="POST" class="styled-form">
+      <div class="field-group">
+        <label for="username">Username or Phone Number</label>
+        <input type="text" id="username" name="username" placeholder="e.g. admin or 9812345678" required autofocus>
+        <span class="hint">Admins enter username; Donors enter registered phone number.</span>
+      </div>
+
+      <div class="field-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+      </div>
+
+      <button type="submit" class="btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+          <polyline points="10 17 15 12 10 7"></polyline>
+          <line x1="15" y1="12" x2="3" y2="12"></line>
+        </svg>
+        Sign In
+      </button>
+
+      <div style="text-align: center; margin-top: 24px; font-size: 0.88rem; color: var(--text-muted);">
+        Don't have an account yet? 
+        <a href="{{ url_for('register') }}" style="color: var(--accent); text-decoration: none; font-weight: 600;">Register Here</a>
+      </div>
+
+      <p style="margin-top: 20px; text-align: center; font-size: 0.8rem; color: var(--text-muted);">
+        Seeded demo passwords are configured through environment variables.
+      </p>
+    </form>
+  </div>
+</div>
+{% endblock %}
