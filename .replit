@@ -1,0 +1,5 @@
+run = "python backend.py"
+entrypoint = "backend.py"
+
+[deployment]
+run = ["python", "backend.py"]
