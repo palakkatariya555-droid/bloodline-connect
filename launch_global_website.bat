@@ -4,7 +4,7 @@ color 0A
 cls
 
 echo ======================================================================
-echo           BLOODLINE CONNECT — ONE-CLICK GLOBAL LAUNCHER
+echo           BLOODLINE CONNECT -- ONE-CLICK GLOBAL LAUNCHER
 echo ======================================================================
 echo.
 
@@ -13,19 +13,18 @@ cd /d "%~dp0"
 echo [1/3] Verifying Python Dependencies...
 python -m pip install -q -r requirements.txt
 if %errorlevel% neq 0 (
-    echo [!] Warning: Dependency check returned error code %errorlevel%. Continuing anyway...
+    echo [!] Warning: Dependency check returned code %errorlevel%.
 ) else (
-    echo [✓] Dependencies checked and up-to-date.
+    echo [OK] Dependencies checked.
 )
 
 echo.
 echo [2/3] Starting Bloodline Connect Flask Server...
 start "Bloodline Connect Backend Server" /min cmd /c "python backend.py"
 
-:: Wait 3 seconds for server to start
 timeout /t 3 /nobreak >nul
 
-echo [✓] Flask server is running locally on http://localhost:5000
+echo [OK] Flask server running locally on http://localhost:5000
 echo.
 
 echo [3/3] Creating Secure Global HTTPS Tunnel...
