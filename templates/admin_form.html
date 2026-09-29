@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Register Admin | Bloodline Connect{% endblock %}
+
+{% block content %}
+<div class="card-container" style="max-width: 650px;">
+  <div class="glass-card">
+    <div class="card-header">
+      <div class="drop-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+      </div>
+      <p class="eyebrow">Blood Donation Management System</p>
+      <h1>Admin Registration</h1>
+      <p>Create an administrator account to manage donors, camps, and blood stock records.</p>
+    </div>
+
+    <form class="styled-form" action="{{ url_for('admin_page') }}" method="POST">
+      <div class="field-group full-width">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" placeholder="e.g. Dr. Ramesh Verma" required>
+      </div>
+
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="adminId">Admin ID (Auto-Generated)</label>
+          <input type="text" id="adminId" name="adminId" value="{{ suggested_id }}" placeholder="e.g. ADM-1042">
+          <p class="hint">Auto-generated. You may customize if needed.</p>
+        </div>
+        <div class="field-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" placeholder="e.g. ramesh_adm" required>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="••••••••" minlength="4" required>
+        </div>
+        <div class="field-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="10-digit mobile number" pattern="[0-9]{10}" required>
+        </div>
+      </div>
+
+      <div class="field-group full-width">
+        <label for="manages">Area of Responsibility</label>
+        <select id="manages" name="manages" required>
+          <option value="donors" selected>Donor Records</option>
+          <option value="camps">Blood Donation Camps</option>
+          <option value="inventory">Blood Stock Inventory</option>
+          <option value="hospitals">Hospital Requests</option>
+        </select>
+        <p class="hint">Primary section this admin will be responsible for.</p>
+      </div>
+
+      <div class="field-group full-width">
+        <label for="handles">Day-to-day Tasks</label>
+        <select id="handles" name="handles" required>
+          <option value="approvals" selected>Donor & Request Approvals</option>
+          <option value="scheduling">Camp Scheduling</option>
+          <option value="reports">Reports & Analytics</option>
+          <option value="support">Donor & Hospital Support</option>
+        </select>
+        <p class="hint">The recurring task this admin will operate.</p>
+      </div>
+
+      <button type="submit" class="btn-primary">Create Admin Account</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

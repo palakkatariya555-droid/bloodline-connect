@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Bloodline Connect Management System{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+  <div class="hero-logo-wrapper">
+    <img src="{{ url_for('static', filename='images/background.jpeg') }}" alt="Bloodline Connect Logo" class="hero-logo">
+  </div>
+  <h1 class="hero-title">Bloodline Connect System</h1>
+  <p class="hero-subtitle">
+    Advanced Blood Donation & Request Management Platform linking compassionate donors with critical medical requests with secure access control.
+  </p>
+
+  <!-- Statistics Counters -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number" data-target="{{ stats.total_admins }}">{{ stats.total_admins }}</div>
+      <div class="stat-label">Active Administrators</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" data-target="{{ stats.total_donors }}">{{ stats.total_donors }}</div>
+      <div class="stat-label">Registered Donors</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" data-target="{{ stats.pending_requests }}">{{ stats.pending_requests }}</div>
+      <div class="stat-label">Pending Requests</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" data-target="{{ stats.fulfilled_donations }}">{{ stats.fulfilled_donations }}</div>
+      <div class="stat-label">Successful Donations</div>
+    </div>
+  </div>
+
+  <!-- Management Modules Grid -->
+  <div class="modules-grid">
+    <a href="{{ url_for('admin_list') }}" class="module-card">
+      <div>
+        <div class="module-icon">🛡️</div>
+        <h2 class="module-title">Admin Management</h2>
+        <p class="module-desc">Manage system administrators, configure operational areas, camp scheduling & access permissions.</p>
+      </div>
+      <div class="module-action">
+        Manage Admins ➔
+      </div>
+    </a>
+
+    <a href="{{ url_for('donor_list') }}" class="module-card">
+      <div>
+        <div class="module-icon">🩸</div>
+        <h2 class="module-title">Donor Registry</h2>
+        <p class="module-desc">Track active donor blood groups, last donation timelines, contact numbers, and real-time availability status.</p>
+      </div>
+      <div class="module-action">
+        View Donors ➔
+      </div>
+    </a>
+
+    <a href="{{ url_for('request_list') }}" class="module-card">
+      <div>
+        <div class="module-icon">🚨</div>
+        <h2 class="module-title">Blood Requests</h2>
+        <p class="module-desc">Manage hospital emergency requests, specify required units, filter urgency levels, and track fulfillment status.</p>
+      </div>
+      <div class="module-action">
+        View Requests ➔
+      </div>
+    </a>
+
+    <a href="{{ url_for('donation_list') }}" class="module-card">
+      <div>
+        <div class="module-icon">❤️</div>
+        <h2 class="module-title">Donation Records</h2>
+        <p class="module-desc">Record completed blood donations, link donor profiles directly to hospital requests, and log blood bank units.</p>
+      </div>
+      <div class="module-action">
+        Log Donation ➔
+      </div>
+    </a>
+  </div>
+
+  <!-- Recent Blood Requests Section -->
+  {% if recent_requests %}
+  <div class="glass-card" style="width: 100%; margin-top: 20px; text-align: left;">
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <div class="eyebrow">Real-Time Queue</div>
+        <h2 style="font-family: var(--font-heading); font-size: 1.4rem;">Recent Urgent Blood Requests</h2>
+      </div>
+      <a href="{{ url_for('request_list') }}" style="color: var(--accent); font-weight: 600; text-decoration: none; font-size: 0.9rem;">View All ➔</a>
+    </div>
+    <div class="table-responsive" style="padding-bottom: 20px;">
+      <table class="glass-table">
+        <thead>
+          <tr>
+            <th>Request ID</th>
+            <th>Patient</th>
+            <th>Blood Group</th>
+            <th>Units</th>
+            <th>Hospital & City</th>
+            <th>Urgency</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for req in recent_requests %}
+          <tr>
+            <td>{{ req.request_id }}</td>
+            <td><strong>{{ req.patient_name }}</strong></td>
+            <td><span class="status-pill critical">{{ req.blood_group }}</span></td>
+            <td>{{ req.units_required }} Unit(s)</td>
+            <td>{{ req.hospital_name }}, {{ req.city }}</td>
+            <td><span class="status-pill {{ req.urgency|lower }}">{{ req.urgency|title }}</span></td>
+            <td><span class="status-pill {{ req.status|lower }}">{{ req.status|title }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

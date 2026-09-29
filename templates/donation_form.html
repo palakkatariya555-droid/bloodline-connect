@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Record Donation | Bloodline Connect{% endblock %}
+
+{% block content %}
+<div class="card-container" style="max-width: 650px;">
+  <div class="glass-card">
+    <div class="card-header">
+      <div class="drop-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+      </div>
+      <p class="eyebrow">Blood Donation Management System</p>
+      <h1>Donation Record</h1>
+      <p>Log a completed blood donation, linking the donor directly to an open blood request.</p>
+    </div>
+
+    <form class="styled-form" action="{{ url_for('donation_page') }}" method="POST">
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="donationId">Donation ID (Auto-Generated)</label>
+          <input type="text" id="donationId" name="donationId" value="{{ suggested_id }}" placeholder="e.g. DON-5012">
+          <p class="hint">Auto-generated. You may customize if needed.</p>
+        </div>
+        <div class="field-group">
+          <label for="bloodGroup">Blood Group</label>
+          <select id="bloodGroup" name="bloodGroup" required>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+" selected>O+</option>
+            <option value="O-">O-</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="donorId">Donor <span style="text-transform:none; font-weight:normal;">(FK)</span></label>
+          <select id="donorId" name="donorId" required>
+            {% for d in donors %}
+              <option value="{{ d.donor_id }}">{{ d.name }} ({{ d.blood_group }}) — {{ d.donor_id }}</option>
+            {% else %}
+              <option value="" disabled>No donors registered yet</option>
+            {% endfor %}
+          </select>
+          <p class="hint">Select existing registered donor.</p>
+        </div>
+        <div class="field-group">
+          <label for="requestId">Target Blood Request <span style="text-transform:none; font-weight:normal;">(FK)</span></label>
+          <select id="requestId" name="requestId" required>
+            {% for r in requests %}
+              <option value="{{ r.request_id }}">Patient: {{ r.patient_name }} ({{ r.blood_group }}) — {{ r.request_id }}</option>
+            {% else %}
+              <option value="" disabled>No pending requests found</option>
+            {% endfor %}
+          </select>
+          <p class="hint">Select request this donation fulfills.</p>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="donationDate">Donation Date</label>
+          <input type="date" id="donationDate" name="donationDate" value="{{ today_date }}" required>
+        </div>
+        <div class="field-group">
+          <label for="units">Units Donated</label>
+          <input type="number" id="units" name="units" placeholder="e.g. 1" min="1" max="5" value="1" required>
+        </div>
+      </div>
+
+      <div class="field-group full-width">
+        <label for="location">Location / Blood Bank</label>
+        <input type="text" id="location" name="location" placeholder="e.g. City Central Blood Bank, Pune" required>
+      </div>
+
+      <div class="field-group full-width">
+        <label for="notes">Clinical / General Notes</label>
+        <textarea id="notes" name="notes" rows="3" placeholder="Donor hemoglobin levels, screening results, remarks..."></textarea>
+      </div>
+
+      <button type="submit" class="btn-primary">Record Donation & Fulfill Request</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

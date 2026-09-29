@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Donor Registry | Bloodline Connect{% endblock %}
+
+{% block content %}
+<div class="card-container">
+  <div class="glass-card">
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+      <div>
+        <p class="eyebrow">Registry</p>
+        <h1>Registered Donors</h1>
+        <p>Complete directory of registered donors, blood types, and donation availability.</p>
+      </div>
+      <a href="{{ url_for('donor_page') }}" class="btn-primary" style="width: auto; padding: 12px 24px; margin: 0;">
+        + Register New Donor
+      </a>
+    </div>
+
+    <!-- Filter Bar -->
+    <div style="padding: 20px 40px 0;">
+      <form method="GET" action="{{ url_for('donor_list') }}" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; background: rgba(255,255,255,0.03); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--glass-border);">
+        <input type="text" name="search" placeholder="Search name or ID..." value="{{ request.args.get('search', '') }}" style="flex: 2; min-width: 180px; padding: 10px 14px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: #fff; border-radius: 6px;">
+
+        <select name="blood_group" style="flex: 1; min-width: 110px; padding: 10px 14px; background: #1a161b; border: 1px solid var(--glass-border); color: #fff; border-radius: 6px;">
+          <option value="">All Blood Groups</option>
+          {% for bg in ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'] %}
+            <option value="{{ bg }}" {% if request.args.get('blood_group') == bg %}selected{% endif %}>{{ bg }}</option>
+          {% endfor %}
+        </select>
+
+        <input type="text" name="city" placeholder="Filter by city..." value="{{ request.args.get('city', '') }}" style="flex: 1; min-width: 130px; padding: 10px 14px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: #fff; border-radius: 6px;">
+
+        <select name="availability" style="flex: 1; min-width: 120px; padding: 10px 14px; background: #1a161b; border: 1px solid var(--glass-border); color: #fff; border-radius: 6px;">
+          <option value="">All Statuses</option>
+          <option value="available" {% if request.args.get('availability') == 'available' %}selected{% endif %}>Available</option>
+          <option value="unavailable" {% if request.args.get('availability') == 'unavailable' %}selected{% endif %}>Unavailable</option>
+        </select>
+
+        <button type="submit" class="btn-primary" style="width: auto; padding: 10px 20px; margin: 0; font-size: 0.85rem;">Filter</button>
+        {% if request.args %}
+          <a href="{{ url_for('donor_list') }}" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem; margin-left: 6px;">Reset</a>
+        {% endif %}
+      </form>
+    </div>
+
+    <div class="table-responsive">
+      {% if donors %}
+      <table class="glass-table">
+        <thead>
+          <tr>
+            <th>Donor ID</th>
+            <th>Name</th>
+            <th>Group</th>
+            <th>Age / Gender</th>
+            <th>Phone</th>
+            <th>City</th>
+            <th>Last Donated</th>
+            <th>Status</th>
+            {% if g.user and g.user.role == 'admin' %}<th>Action</th>{% endif %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for donor in donors %}
+          <tr>
+            <td>{{ donor.donor_id }}</td>
+            <td><strong>{{ donor.name }}</strong></td>
+            <td><span class="status-pill critical" style="font-size: 0.85rem;">{{ donor.blood_group }}</span></td>
+            <td>{{ donor.age }} yrs / {{ donor.gender|title }}</td>
+            <td>{{ donor.phone_no }}</td>
+            <td>{{ donor.city }}</td>
+            <td>{{ donor.last_donation_date if donor.last_donation_date else 'First Time' }}</td>
+            <td>
+              <span class="status-pill {{ donor.availability|lower }}">
+                {{ donor.availability|title }}
+              </span>
+            </td>
+            {% if g.user and g.user.role == 'admin' %}
+            <td>
+              <form action="{{ url_for('delete_donor', donor_id=donor.donor_id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete donor {{ donor.name }}?');">
+                <button type="submit" class="btn-sm btn-danger-sm" style="border:none; cursor:pointer;">Delete</button>
+              </form>
+            </td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div style="text-align: center; padding: 60px 20px;">
+        <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 20px;">No donors found matching the specified criteria.</p>
+        <a href="{{ url_for('donor_page') }}" class="btn-primary" style="display: inline-flex; width: auto; padding: 12px 28px;">
+          Register New Donor
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
